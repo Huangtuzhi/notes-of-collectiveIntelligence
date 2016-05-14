@@ -67,7 +67,7 @@ def getRecommendations(prefs, person, similarity=sim_person):
         if other == person: continue
         sim = similarity(prefs, person, other)
 
-        if sim < 0: continue
+        if sim <= 0: continue
 
         for item in prefs[other]:
             if item not in prefs[person] or prefs[person][item] == 0:
@@ -82,8 +82,85 @@ def getRecommendations(prefs, person, similarity=sim_person):
     return rankings
 
 
+def transformPrefs(prefs):
+    result = {}
+    for person in prefs:
+        for item in prefs[person]:
+            result.setdefault(item, {})
+
+            result[item][person] = prefs[person][item]
+    return result
+
+
+def calculateSimilarItems(prefs, n=10):
+    result = {}
+    itemPrefs = transformPrefs(prefs)
+    c = 0
+    for item in itemPrefs:
+        c += 1
+        if c % 100 == 0:
+            print "%d / %d" % (c, len(itemPrefs))
+        scores = topMatches(itemPrefs, item, n=n, similarity=sim_distance)
+        result[item] = scores
+    return result
+
+
+def getRecommendedItems(prefs, itemMatch, user):
+    userRatings = prefs[user]
+    scores = {}
+    totalSim = {}
+
+    for (item, rating) in userRatings.items():
+        for (similarity, item2) in itemMatch[item]:
+            if item2 in userRatings:
+                continue
+
+            scores.setdefault(item2, 0)
+            scores[item2] += similarity * rating
+
+            totalSim.setdefault(item2, 0)
+            totalSim[item2] += similarity
+
+    rankings = [(score / totalSim[item], item) for item, score in scores.items()]
+    rankings.sort()
+    rankings.reverse()
+    return rankings
+
+
+def loadMovieLens(path=r'C:\Users\titus\Desktop\Doing\CollectiveIntelligence\Chapter-2\ml-100k'):
+    movies = {}
+    for line in open(path+'\u.item'):
+        (id, title) = line.split('|')[0:2]
+        movies[id] = title
+
+    # load data
+    prefs = {}
+    for line in open(path+'\u.data'):
+        (user, movieid, rating, ts) = line.split('\t')
+        prefs.setdefault(user, {})
+        prefs[user][movies[movieid]] = float(rating)
+    return prefs
+
+
+
 # print sim_distance(critics, 'Lisa Rose', 'Gene Seymour')
 # print sim_person(critics, 'Lisa Rose', 'Gene Seymour')
 # print topMatches(critics, 'Toby')
 # print getRecommendations(critics, 'Toby')
-print getRecommendations(critics, 'Toby', similarity=sim_distance)
+# print getRecommendations(critics, 'Toby', similarity=sim_distance)
+# print transformPrefs(critics)
+
+# movies = transformPrefs(critics)
+# print getRecommendations(movies, 'Just My Luck')
+
+# itemsim = calculateSimilarItems(critics)
+# print getRecommendedItems(critics, itemsim, 'Toby')
+
+# user-based recommendation
+# prefs = loadMovieLens()
+# print getRecommendations(prefs, '87')[0:30]
+
+# item-based recommendation
+prefs = loadMovieLens()
+itemsim = calculateSimilarItems(prefs, n=50)
+print getRecommendedItems(prefs, itemsim, '87')[0:30]
