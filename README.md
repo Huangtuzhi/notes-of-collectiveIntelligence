@@ -7,3 +7,5 @@ notes and gists of Programming Collective Intelligence.
 [Chapter-3: Discovering Groups](./Chapter-3)
 
 [Chapter-4: Searching and Ranking](./Chapter-4)
+
+[Chapter-5: Optimization](./Chapter-5)
