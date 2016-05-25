@@ -103,7 +103,7 @@ def hillclimb(domin, costf):
     return sol
 
 
-def annealingoptimize(domain, costf, T=10000.0, cool=0.95, step=1):
+def annealingoptimize(domin, costf, T=10000.0, cool=0.95, step=1):
     vec = [random.randint(domin[i][0], domin[i][1]) 
           for i in range(len(domin))]
 
@@ -181,7 +181,7 @@ def geneticoptimize(domain, costf, popsize=50, step=1, mutprod=0.2, elite=0.2, m
 
 
 
-domin = [(0, 8)]*(len(people)*2)
-s = geneticoptimize(domin, schedulecost)
-print s
-printschedule(s)
+# domin = [(0, 8)]*(len(people)*2)
+# s = geneticoptimize(domin, schedulecost)
+# print s
+# printschedule(s)
