@@ -9,3 +9,7 @@ notes and gists of Programming Collective Intelligence.
 [Chapter-4: Searching and Ranking](./Chapter-4)
 
 [Chapter-5: Optimization](./Chapter-5)
+
+[Chapter-6: Document Filtering](./Chapter-6)
+
+[Chapter-7: Modeling with Decision Trees](./Chapter-7)
