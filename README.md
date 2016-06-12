@@ -13,3 +13,5 @@ notes and gists of Programming Collective Intelligence.
 [Chapter-6: Document Filtering](./Chapter-6)
 
 [Chapter-7: Modeling with Decision Trees](./Chapter-7)
+
+[Chapter-8: Building Price Models](./Chapter-8)
